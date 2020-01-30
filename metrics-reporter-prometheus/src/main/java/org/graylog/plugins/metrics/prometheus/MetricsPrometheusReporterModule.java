@@ -21,6 +21,7 @@ import io.prometheus.client.dropwizard.DropwizardExports;
 import io.prometheus.client.exporter.PushGateway;
 import org.graylog.plugins.metrics.prometheus.providers.CollectorRegistryProvider;
 import org.graylog.plugins.metrics.prometheus.providers.DropwizardExportsProvider;
+import org.graylog.plugins.metrics.prometheus.providers.DropwizardSampleBuilderProvider;
 import org.graylog.plugins.metrics.prometheus.providers.PushGatewayProvider;
 import org.graylog.plugins.metrics.prometheus.rest.MetricsResource;
 import org.graylog2.plugin.PluginConfigBean;
@@ -39,6 +40,7 @@ public class MetricsPrometheusReporterModule extends PluginModule {
     protected void configure() {
         addConfigBeans();
 
+        bind(DropwizardSampleBuilder.class).toProvider(DropwizardSampleBuilderProvider.class);
         bind(DropwizardExports.class).toProvider(DropwizardExportsProvider.class);
         bind(CollectorRegistry.class).toProvider(CollectorRegistryProvider.class);
         bind(PushGateway.class).toProvider(PushGatewayProvider.class);

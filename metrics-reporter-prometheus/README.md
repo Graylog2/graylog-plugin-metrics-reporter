@@ -1,5 +1,21 @@
 # metrics-reporter-prometheus
 
+This plugin exposes metrics to be scrapeable by prometheus.
+
+It primarily converts the internally used Dropbox metrics one to one with a few
+notable exceptions:
+
+For any metric that has an ID embedded in its metric name, the id is removed
+from the metric name and added as label `id` to prevent unnecessary
+proliferation of metrics and make them easier to compare and/or aggregate.
+
+For streams and stream rules additional information is provided as labels:
+
+* `stream-title`: title of stream (stream and stream rule)
+* `rule-type`: Type of stream rule, e.g. `regexp`
+* `stream-id`: related stream id for stream rule
+* `index-set-id`: ID of related index set for stream and stream rule
+
 ## Pulling metrics
 
 The Prometheus metrics endpoint is available at `http://graylog.example.com:9000/api/plugins/org.graylog.plugins.metrics.prometheus/metrics`.

@@ -24,20 +24,29 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.graylog.plugins.metrics.prometheus.MetricsPrometheusReporterModule;
 import org.graylog2.shared.bindings.GuiceInjectorHolder;
+import org.graylog2.streams.StreamRuleService;
+import org.graylog2.streams.StreamService;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class MetricsResourceTest extends JerseyTest {
     public MetricsResourceTest() {
         final Module metricsModule = binder -> {
             final MetricRegistry registry = new MetricRegistry();
+            final StreamRuleService srs = mock(StreamRuleService.class);
+            final StreamService ss = mock(StreamService.class);
             final Counter counter = registry.counter("test.counter");
             counter.inc(42L);
+
+            binder.bind(StreamRuleService.class).toInstance(srs);
+            binder.bind(StreamService.class).toInstance(ss);
             binder.bind(MetricRegistry.class).toInstance(registry);
         };
         GuiceInjectorHolder.createInjector(ImmutableList.of(new MetricsPrometheusReporterModule(), metricsModule));

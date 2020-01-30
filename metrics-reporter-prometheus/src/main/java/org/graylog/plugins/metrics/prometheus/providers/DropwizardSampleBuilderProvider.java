@@ -16,16 +16,9 @@
  */
 package org.graylog.plugins.metrics.prometheus.providers;
 
-import com.codahale.metrics.MetricRegistry;
-
-import org.graylog2.database.NotFoundException;
-import org.graylog2.plugin.streams.Stream;
 import org.graylog2.streams.StreamRuleService;
 import org.graylog2.streams.StreamService;
 
-import io.prometheus.client.Collector;
-import io.prometheus.client.Collector.MetricFamilySamples.Sample;
-import io.prometheus.client.dropwizard.DropwizardExports;
 import org.graylog.plugins.metrics.prometheus.DropwizardSampleBuilder;
 
 import javax.inject.Inject;
@@ -33,24 +26,19 @@ import javax.inject.Provider;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
 
-public class DropwizardExportsProvider implements Provider<DropwizardExports> {
-    private final MetricRegistry metricRegistry;
-    private final DropwizardSampleBuilder sampleBuilder;
-
+public class DropwizardSampleBuilderProvider implements Provider<DropwizardSampleBuilder> {
+    private final StreamService streamService;
+    private final StreamRuleService streamRuleService;
 
     @Inject
-    public DropwizardExportsProvider(MetricRegistry metricRegistry, DropwizardSampleBuilder sampleBuilder) {
-        this.metricRegistry = requireNonNull(metricRegistry);
-        this.sampleBuilder = sampleBuilder;
+    public DropwizardSampleBuilderProvider(StreamService streamService, StreamRuleService streamRuleService) {
+        this.streamRuleService = requireNonNull(streamRuleService);
+        this.streamService =  requireNonNull(streamService);
     }
 
     @Override
-    public DropwizardExports get() {
-        return new DropwizardExports(metricRegistry, sampleBuilder);
+    public DropwizardSampleBuilder get() {
+        return new DropwizardSampleBuilder(streamService, streamRuleService);
     }
 }
-

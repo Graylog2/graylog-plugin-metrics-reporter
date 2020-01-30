@@ -40,6 +40,7 @@ public class PushGatewayPeriodicalTest {
 
     private final MetricsPrometheusReporterConfiguration configuration = new MetricsPrometheusReporterConfiguration();
     private final CollectorRegistry collectorRegistry = new CollectorRegistry();
+
     @Mock
     private PushGateway pushGateway;
     private PushGatewayPeriodical periodical;
@@ -85,7 +86,6 @@ public class PushGatewayPeriodicalTest {
     @Test
     public void isDaemonIsTrue() throws Exception {
         assertTrue(periodical.isDaemon());
-
     }
 
     @Test
